@@ -7,17 +7,27 @@ st.set_page_config(page_title="DB-NADI | Portal Analitik", layout="wide")
 # --- SISTEM LOGIN SEDERHANA ---
 def check_password():
     """Mengembalikan nilai True jika password benar."""
+    
+    # Database user sederhana dalam bentuk dictionary
+    USERS = {
+        "pao": {"password": "123", "role": "admin"},
+        "iyus": {"password": "123", "role": "pelihat"}
+    }
+
     def password_entered():
-        # Cek kecocokan user dan password (bisa disesuaikan)
-        if st.session_state["username"] == "admin" and st.session_state["password"] == "nadi123":
+        user = st.session_state["username"]
+        passwd = st.session_state["password"]
+        
+        # Cek apakah username ada di database dan password cocok
+        if user in USERS and USERS[user]["password"] == passwd:
             st.session_state["password_correct"] = True
-            del st.session_state["password"]  # Hapus password dari memory demi keamanan
+            st.session_state["user_role"] = USERS[user]["role"] # Menyimpan role user
+            del st.session_state["password"]  
             del st.session_state["username"]
         else:
             st.session_state["password_correct"] = False
 
     if "password_correct" not in st.session_state:
-        # Tampilan Awal: Form Login
         st.markdown("<h1 style='text-align: center;'>Masuk ke DB-NADI</h1>", unsafe_allow_html=True)
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
@@ -26,7 +36,6 @@ def check_password():
             st.button("Login", on_click=password_entered)
         return False
     elif not st.session_state["password_correct"]:
-        # Tampilan jika password salah
         st.markdown("<h1 style='text-align: center;'>Masuk ke DB-NADI</h1>", unsafe_allow_html=True)
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
