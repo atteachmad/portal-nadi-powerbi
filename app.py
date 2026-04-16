@@ -48,14 +48,31 @@ def check_password():
 
 # --- HALAMAN UTAMA DASHBOARD ---
 if check_password():
+    role = st.session_state["user_role"]
+    st.success(f"Selamat datang, Anda login sebagai {role.capitalize()}")
     st.markdown("### Dashboard Kualitas Layanan & Sentimen")
     
-    # Masukkan URL iFrame Power BI Anda di sini
-    # Pastikan sudah ditambahkan parameter penutup nav dan filter
+    # Masukkan URL iFrame Power BI Anda di sini (biarkan linknya tetap seperti ini)
     power_bi_url = "https://app.powerbi.com/view?r=eyJrIjoiNzQ5NWJmZjMtNjQ2Yy00MzE5LThjZDMtZjFkNGU0ODdmMDY3IiwidCI6ImUyMjAwNGJkLWFjYmItNDJlMS05YmQ4LWExMTUzZDcwNDdlMCIsImMiOjEwfQ%3D%3D&navContentPaneEnabled=false&filterPaneEnabled=false"
     
-    # Merender iframe di dalam web
-    components.html(
-        f'<iframe title="JNE Bandung" width="100%" height="800" src="{power_bi_url}" frameborder="0" allowFullScreen="true"></iframe>',
-        height=800,
-    )
+    # --- TRIK CSS CROP UNTUK MENYEMBUNYIKAN FOOTER POWER BI ---
+    # Kita membuat "bingkai" (div) setinggi 760px, 
+    # tapi isinya (iframe) setinggi 800px.
+    # overflow: hidden; akan memotong kelebihan 40px di bagian bawah (tempat logo berada).
+    
+    html_code = f"""
+    <div style="width: 100%; height: 760px; overflow: hidden;">
+        <iframe 
+            title="JNE Bandung" 
+            width="100%" 
+            height="800" 
+            src="{power_bi_url}" 
+            frameborder="0" 
+            allowFullScreen="true"
+            style="margin-top: 0px;">
+        </iframe>
+    </div>
+    """
+    
+    # Menampilkan ke Streamlit dengan tinggi bingkai 760px
+    components.html(html_code, height=760)
