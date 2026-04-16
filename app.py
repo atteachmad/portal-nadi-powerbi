@@ -29,17 +29,15 @@ def check_password():
     # Jika belum login atau password salah
     if "password_correct" not in st.session_state or not st.session_state["password_correct"]:
         
-        # --- CSS KHUSUS HALAMAN LOGIN (TAMPILAN MEWAH & MODERN) ---
+        # --- CSS KHUSUS HALAMAN LOGIN ---
         st.markdown("""
             <style>
-                /* Import Font Poppins yang Eksekutif */
                 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
 
                 html, body, [class*="css"] {
                     font-family: 'Poppins', sans-serif;
                 }
 
-                /* Background Gradient Animasi yang Mewah */
                 .stApp {
                     background: linear-gradient(135deg, #0f2027, #203a43, #2ca1bd);
                     background-size: 400% 400%;
@@ -52,12 +50,10 @@ def check_password():
                     100% { background-position: 0% 50%; }
                 }
 
-                /* Menurunkan posisi form agar pas di tengah layar */
                 .block-container {
                     padding-top: 8rem !important;
                 }
 
-                /* Glassmorphism Card (Efek Kaca) khusus untuk kotak Login */
                 div[data-testid="column"]:nth-of-type(2) {
                     background: rgba(255, 255, 255, 0.05);
                     backdrop-filter: blur(15px);
@@ -68,7 +64,6 @@ def check_password():
                     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
                 }
 
-                /* Tipografi Judul */
                 .login-title {
                     text-align: center;
                     font-size: 3rem;
@@ -88,29 +83,30 @@ def check_password():
                     letter-spacing: 1px;
                 }
 
-                /* Warna Teks Label Input */
                 .stTextInput p {
                     color: #e0e0e0 !important;
                     font-weight: 600;
                     letter-spacing: 1px;
                 }
 
-                /* Styling Kotak Input */
+                /* PERBAIKAN: Background putih terang, teks biru dongker/hitam agar sangat jelas */
                 .stTextInput input {
-                    background-color: rgba(255, 255, 255, 0.1) !important;
-                    color: white !important;
-                    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+                    background-color: #ffffff !important;
+                    color: #0f172a !important; 
+                    border: 2px solid transparent !important;
                     border-radius: 10px !important;
                     padding: 12px 15px !important;
+                    font-weight: 600 !important;
                 }
                 .stTextInput input:focus {
                     border-color: #4fc3f7 !important;
                     box-shadow: 0 0 10px rgba(79, 195, 247, 0.5) !important;
+                    outline: none !important;
                 }
 
-                /* Styling Tombol Login Interaktif */
-                .stButton button {
-                    width: 100%;
+                /* PERBAIKAN: Memastikan tombol membentang penuh */
+                .stButton > button {
+                    width: 100% !important;
                     background: linear-gradient(90deg, #1cb5e0 0%, #000851 100%);
                     color: white !important;
                     font-weight: 600 !important;
@@ -123,7 +119,7 @@ def check_password():
                     margin-top: 1.5rem;
                     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
                 }
-                .stButton button:hover {
+                .stButton > button:hover {
                     transform: translateY(-3px);
                     box-shadow: 0 8px 25px rgba(28, 181, 224, 0.6);
                     background: linear-gradient(90deg, #000851 0%, #1cb5e0 100%);
@@ -134,7 +130,6 @@ def check_password():
             </style>
         """, unsafe_allow_html=True)
 
-        # Layout Kolom agar Card Login proporsional di tengah
         col1, col2, col3 = st.columns([1.5, 2, 1.5]) 
         with col2:
             st.markdown("<div class='login-title'>DB-NADI</div>", unsafe_allow_html=True)
@@ -142,7 +137,9 @@ def check_password():
             
             st.text_input("Username", key="username")
             st.text_input("Password", type="password", key="password")
-            st.button("LOGIN", on_click=password_entered)
+            
+            # PERBAIKAN: Menambahkan use_container_width agar tombol tidak jadi bulat
+            st.button("LOGIN", on_click=password_entered, use_container_width=True)
             
             if "password_correct" in st.session_state and not st.session_state["password_correct"]:
                 st.error("Kredensial tidak valid. Silakan coba lagi.")
@@ -153,7 +150,6 @@ def check_password():
 if check_password():
     role = st.session_state["user_role"]
     
-    # --- 1. CSS UNTUK MELEBARKAN LAYAR 16:9 (Tanpa Margin) ---
     st.markdown("""
         <style>
             .block-container {
@@ -169,7 +165,6 @@ if check_password():
     
     power_bi_url = "https://app.powerbi.com/view?r=eyJrIjoiNzQ5NWJmZjMtNjQ2Yy00MzE5LThjZDMtZjFkNGU0ODdmMDY3IiwidCI6ImUyMjAwNGJkLWFjYmItNDJlMS05YmQ4LWExMTUzZDcwNDdlMCIsImMiOjEwfQ%3D%3D&navContentPaneEnabled=false&filterPaneEnabled=false"
     
-    # --- 2. TRIK CROP + TIRAI LOADING CUSTOM ---
     html_code = f"""
     <div style="position: relative; width: 100%; height: 720px; overflow: hidden;">
         
