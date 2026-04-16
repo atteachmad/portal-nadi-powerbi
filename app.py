@@ -45,6 +45,7 @@ def check_password():
             st.error("Username atau Password salah 😕")
         return False
     return True
+
 # --- HALAMAN UTAMA DASHBOARD ---
 if check_password():
     role = st.session_state["user_role"]
@@ -68,17 +69,36 @@ if check_password():
     # Link URL Power BI Anda
     power_bi_url = "https://app.powerbi.com/view?r=eyJrIjoiNzQ5NWJmZjMtNjQ2Yy00MzE5LThjZDMtZjFkNGU0ODdmMDY3IiwidCI6ImUyMjAwNGJkLWFjYmItNDJlMS05YmQ4LWExMTUzZDcwNDdlMCIsImMiOjEwfQ%3D%3D&navContentPaneEnabled=false&filterPaneEnabled=false"
     
-    # --- 2. TRIK CROP YANG LEBIH DALAM ---
-    # Container kita buat tingginya 720px, tapi iframenya 760px.
-    # Ini akan memotong tepat 40 pixel bagian paling bawah iframe.
+    # --- 2. TRIK CROP + TIRAI LOADING CUSTOM ---
     html_code = f"""
     <div style="position: relative; width: 100%; height: 720px; overflow: hidden;">
+        
         <iframe 
             title="JNE Bandung" 
             style="position: absolute; top: 0; left: 0; width: 100%; height: 760px; border: none;" 
             src="{power_bi_url}" 
             allowFullScreen="true">
         </iframe>
+
+        <div id="loading-curtain" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: white; z-index: 10; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+            <div style="border: 4px solid #f3f3f3; border-top: 4px solid #1f77b4; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;"></div>
+            <p style="font-family: sans-serif; color: #555; margin-top: 20px; font-weight: bold;">Menyiapkan Visual DB-NADI...</p>
+            <style>
+                @keyframes spin {{ 0% {{ transform: rotate(0deg); }} 100% {{ transform: rotate(360deg); }} }}
+            </style>
+        </div>
+
+        <script>
+            setTimeout(function() {{
+                var curtain = document.getElementById('loading-curtain');
+                if (curtain) {{
+                    curtain.style.transition = "opacity 0.8s ease";
+                    curtain.style.opacity = "0"; // Efek memudar
+                    setTimeout(function() {{ curtain.style.display = "none"; }}, 800); // Hapus sepenuhnya
+                }}
+            }}, 4000); // 4000 milidetik = 4 detik
+        </script>
+
     </div>
     """
     
