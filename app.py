@@ -191,7 +191,7 @@ if check_password():
                     curtain.style.opacity = "0"; 
                     setTimeout(function() {{ curtain.style.display = "none"; }}, 800); 
                 }}
-            }}, 4000); 
+            }}, 6000); 
         </script>
 
     </div>
