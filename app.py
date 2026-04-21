@@ -11,7 +11,7 @@ def check_password():
     # Database user sederhana dalam bentuk dictionary
     USERS = {
         "pao": {"password": "123", "role": "admin"},
-        "iyus": {"password": "123", "role": "pelihat"}
+        "iyus": {"password": "master", "role": "pelihat"}
     }
 
     def password_entered():
